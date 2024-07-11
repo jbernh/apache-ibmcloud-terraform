@@ -1,5 +1,5 @@
 data "ibm_compute_ssh_key" "ssh_key" {
-  label = var.ssh_key
+  label = var.existing_ssh_key
 }
 
 
@@ -16,11 +16,10 @@ resource "ibm_compute_vm_instance" "apache_vm" {
   os_reference_code = "CENTOSSTREAM_9_64"
   datacenter        = var.datacenter
   network_speed     = 100
-  cores             = 2
-  memory            = 2048
+  flavor_key_name   = "B1_2X8X25"
   private_vlan_id   = ibm_network_vlan.apache_vlan.id
-
-  ssh_key_ids = ["${data.ibm_compute_ssh_key.ssh_key.id}"]
+  local_disk        = false
+  ssh_key_ids       = [data.ibm_compute_ssh_key.ssh_key.id]
 
 }
 
